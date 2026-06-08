@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'telarevisao.dart';
+import 'telacadastro.dart';
+import 'telahome.dart';
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({super.key});
@@ -9,17 +10,10 @@ class TelaLogin extends StatefulWidget {
 }
 
 class _TelaLoginState extends State<TelaLogin> {
-  final TextEditingController emailController =
-      TextEditingController(); //Pega o texto digitado para o email
-  final TextEditingController senhaController =
-      TextEditingController(); //Pega o texto digitado para a senha
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController senhaController = TextEditingController();
 
-      bool emailValido(String email) {
-    final regex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');//Tem que ter texto antes do @, Tem que ter o simbolo @,
-    return regex.hasMatch(email);
-  }
-
-  String mensagemErro = ''; //String que vamos usar para definir erros
+  String mensagemErro = '';
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +34,7 @@ class _TelaLoginState extends State<TelaLogin> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Tela de Login',
+                'Login',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -50,20 +44,15 @@ class _TelaLoginState extends State<TelaLogin> {
               const Text(
                 'Digite seu email e senha para acessar o app.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 30),
               TextField(
-                //Cria um campo para digitar o texto
-                controller: emailController, //Liga o campo ao controlador
-                keyboardType:
-                    TextInputType.emailAddress, //Define tipo de teclado
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'Email',
-                  hintText:
-                      'Digite seu email', //texto dentro do campo como exemplo
+                  hintText: 'Digite seu email',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.email),
                 ),
@@ -71,7 +60,7 @@ class _TelaLoginState extends State<TelaLogin> {
               const SizedBox(height: 15),
               TextField(
                 controller: senhaController,
-                obscureText: true, // Esconde o texto digitado
+                obscureText: true,
                 decoration: const InputDecoration(
                   labelText: 'Senha',
                   hintText: 'Digite sua senha',
@@ -79,7 +68,7 @@ class _TelaLoginState extends State<TelaLogin> {
                   prefixIcon: Icon(Icons.lock),
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 10),
               Text(
                 mensagemErro,
                 style: const TextStyle(
@@ -88,35 +77,52 @@ class _TelaLoginState extends State<TelaLogin> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               ElevatedButton.icon(
                 onPressed: () {
-                  // ao pressionar
-                  String email = emailController.text; // vai definir se o usuário colocou email correto
-                  String senha = senhaController.text; // vai definir se o usuário colocou senha correta
+                  String email = emailController.text;
+                  String senha = senhaController.text;
 
-                  if (!email.contains('@')) {
-                    // se o email não conter o @, dá erro
+                  if (email.isEmpty) {
+                    setState(() {
+                      mensagemErro = 'Digite seu email';
+                    });
+                  } else if (!email.contains('@')) {
                     setState(() {
                       mensagemErro = 'Digite um email válido';
                     });
                   } else if (senha.isEmpty) {
-                    // se a senha estiver vazia, dá erro
                     setState(() {
                       mensagemErro = 'Digite sua senha';
                     });
                   } else {
-                    Navigator.push(
+                    setState(() {
+                      mensagemErro = '';
+                    });
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TelaRevisao(),
+                        builder: (context) => const TelaHome(),
                       ),
                     );
                   }
                 },
                 icon: const Icon(Icons.login),
                 label: const Text('Entrar'),
-              ), 
+              ),
+              const SizedBox(height: 10),
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TelaCadastro(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.person_add),
+                label: const Text('Criar conta'),
+              ),
             ],
           ),
         ),
